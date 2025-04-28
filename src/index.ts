@@ -13,7 +13,10 @@ app.use(cookieParser())
 app.use('/api/v1/user', userRouter)
 app.use('/api/v1/post', postRouter)
 
-app.listen(process.env.BASE_URL_PORT, (error) => {
-    console.log("server is running")
-    if(error) console.log(error)
-})
+app.listen(process.env.PORT || process.env.BASE_URL_PORT || 5000, (error) => {
+    if (error) {
+        console.error("Error starting the server:", error);
+    } else {
+        console.log("Server is running");
+    }
+});

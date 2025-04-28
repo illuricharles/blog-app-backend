@@ -14,6 +14,9 @@ app.use('/api/v1/user', userRouter)
 app.use('/api/v1/post', postRouter)
 
 app.listen(process.env.PORT || process.env.BASE_URL_PORT || 5000, (error) => {
-    console.log("server is running")
-    if(error) console.log(error)
-})
+    if (error) {
+        console.error("Error starting the server:", error);
+    } else {
+        console.log("Server is running");
+    }
+});

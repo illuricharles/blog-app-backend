@@ -88,6 +88,9 @@ router.post('/signin', async(req, res) => {
             const token = jwt.sign({id: user.id}, process.env.JWT_SECRET)
             res.cookie("token", token, {
                 maxAge: 86400000,
+                httpOnly: false, 
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
             })
             res.status(200).json({
                 message: "user login successful."

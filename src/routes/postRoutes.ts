@@ -290,6 +290,14 @@ router.get('/:postId', async (req, res) => {
                 }
             }
         })
+        
+        if(post === null) {
+            res.status(404).json({
+                message: "Post Not Found."
+            })
+            return 
+        }
+
         res.json({
             post
         })

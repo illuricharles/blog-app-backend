@@ -88,7 +88,7 @@ router.post('/signin', async(req, res) => {
             const token = jwt.sign({id: user.id}, process.env.JWT_SECRET)
             res.cookie("token", token, {
                 maxAge: 86400000,
-                httpOnly: false, 
+                httpOnly: true, 
                 secure: process.env.NODE_ENV === 'production',
                 sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
             })
@@ -110,7 +110,28 @@ router.post('/signin', async(req, res) => {
     }
 })
 
+router.get('/me', async(req, res) => {
+    const {token} = req.cookies
+    if(!token) {
+        res.status(401).json({ loggedIn: false });
+        return
+    }
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET as string)  as {id: string}
+        const userId = decoded.id
+        res.status(200).json({ loggedIn: true, userId });
+    }
+    
+    catch(e) {
+        console.log(e)
+        res.status(500).json({loggedIn: false, message: "Internal Server Error."})
+    }
+})
 
+router.post('/logout', async(req, res) => {
+    res.clearCookie('token')
+    res.status(200).json({message: "logout successful."})
+})
 
 
 export default router

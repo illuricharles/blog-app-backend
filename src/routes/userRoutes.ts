@@ -129,7 +129,12 @@ router.get('/me', async(req, res) => {
 })
 
 router.post('/logout', async(req, res) => {
-    res.clearCookie('token')
+    res.clearCookie('token',  {
+        maxAge: 86400000,
+        httpOnly: true, 
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+    })
     res.status(200).json({message: "logout successful."})
 })
 
